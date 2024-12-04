@@ -9,6 +9,10 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExport
 from opentelemetry.instrumentation.celery import CeleryInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from celery.signals import worker_process_init
+from opentelemetry.sdk._logs import LoggingHandler, LoggerProvider
+from opentelemetry.sdk._logs.export import BatchLogProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 
 otel_headers = os.getenv("OTEL_EXPORTER_OTLP_HEADERS")
 
