@@ -123,10 +123,10 @@ DATABASES = {
 DJANGO_LOG_LEVEL=DEBUG
 LOGGING = {
     'formatters': {
-       'otel':  {
+        'otel':  {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {trace_id} {span_id} {message}',
             'style': '{',
-            '()': 'tr_sys.tr_sys.logging_utils.OpenTelemetryFormatter',
+            '()': 'tr_sys.logging_utils.OpenTelemetryFormatter', 
         }
     },
     'version': 1,
@@ -135,22 +135,32 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'otel'
-        }
-    },
+        },
+        'opentelemetry': {
+            'class': 'opentelemetry.sdk._logs.LoggingHandler',
+            'formatter': 'otel',
+            'level': 'DEBUG',
+        },
+    },    
     'root': {
         'handlers': ['console'],
         'level': 'DEBUG',
     },
-    'loggers': {
+     'loggers': {
         'tr_ars.tasks': {
             'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
+            'handlers': ['console','opentelemetry'],
+            'propagate': True,
         },
         'tr_ars.default_ars_app.api': {
             'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
+            'handlers': ['console','opentelemetry'],
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['console', 'opentelemetry'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
     },
 }
